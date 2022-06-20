@@ -4,7 +4,7 @@ const axios = Axios.create({
   timeout: 30 * 1000,
 })
 axios.interceptors.request.use((config) => {
-  config.params = { _f: parseInt(Math.random() * 10) }
+  config.params = { ...config.params, _f: parseInt(Math.random() * 10) }
   return config
 })
 axios.interceptors.response.use((res) => {

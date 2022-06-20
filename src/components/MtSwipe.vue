@@ -90,7 +90,9 @@ export default {
       const threshold = this.bannerWidth / 3
       const delta = -(e.changedTouches[0].clientX - this.startX)
       const offset = (delta / Math.abs(delta)) * +(Math.abs(delta) > threshold)
-      this.setCurrentActive(this.currentIndex + offset)
+      delta === 0
+        ? this.setCurrentActive(this.currentIndex)
+        : this.setCurrentActive(this.currentIndex + offset)
       this.startAutoPlay()
     },
     onResize() {

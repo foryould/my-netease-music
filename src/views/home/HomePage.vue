@@ -17,7 +17,7 @@
         <mt-swipe :list.sync="list">
           <template #default="{ item }">
             <img
-              :src="item.imageUrl"
+              :src="item.imageUrl || item.pic"
               style="
                 height: 100%;
                 width: 95vw;
