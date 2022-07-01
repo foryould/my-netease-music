@@ -3,6 +3,17 @@
     <router-view />
   </div>
 </template>
+<script>
+import toast from './utils/toast'
+export default {
+  created() {
+    toast('三秒后跳转播放页')
+    setTimeout(() => {
+      this.$router.push('/playing')
+    }, 3000)
+  },
+}
+</script>
 
 <style lang="scss">
 * {
