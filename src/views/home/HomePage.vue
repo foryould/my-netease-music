@@ -80,8 +80,8 @@
           {{ f.name }}
         </div>
       </div>
+      <mt-drawer :visible.sync="isShowDrawer"></mt-drawer>
     </div>
-    <mt-drawer :visible.sync="isShowDrawer"></mt-drawer>
   </div>
 </template>
 <script>

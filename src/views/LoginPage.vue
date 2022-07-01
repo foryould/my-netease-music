@@ -102,6 +102,7 @@ export default {
         this.setUserInfo(loginResult.profile)
         setToken(loginResult.token)
         setUser(loginResult.profile)
+        this.$router.push({ path: '/' })
       } catch (e) {
         console.error(e)
       }
