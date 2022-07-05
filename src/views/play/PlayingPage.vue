@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div class="playing-body" @click="switchComponents">
+    <div class="playing-body">
       <component
         ref="lyric"
         :is="isShowWitch"

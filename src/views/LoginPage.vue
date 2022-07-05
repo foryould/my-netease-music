@@ -68,6 +68,12 @@ export default {
       return !(this.phone && this.phoneCode)
     },
   },
+  created() {
+    toast('三秒后跳转至播放页')
+    setTimeout(() => {
+      this.$router.push('/playing')
+    }, 3000)
+  },
   methods: {
     ...mapMutations(['setUserInfo']),
     async getCode() {
