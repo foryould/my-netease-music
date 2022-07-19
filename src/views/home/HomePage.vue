@@ -202,7 +202,7 @@ export default {
 .footer {
   display: flex;
   justify-content: space-between;
-  padding: 4.2rem;
+  padding: 3.2rem;
 
   .footer-item {
     display: flex;
@@ -211,9 +211,9 @@ export default {
   }
 
   .footer-icon {
-    width: 10.667rem;
-    height: 10.667rem;
-    font-size: 8rem;
+    width: 8.667rem;
+    height: 8.667rem;
+    font-size: 6rem;
     color: #b0b0b0;
     display: flex;
     align-items: center;
@@ -225,9 +225,9 @@ export default {
   }
 
   .is-selected {
-    font-size: 8rem;
-    width: 10.667rem;
-    height: 10.667rem;
+    font-size: 6rem;
+    width: 8.667rem;
+    height: 8.667rem;
     display: flex;
     align-items: center;
     justify-content: center;
