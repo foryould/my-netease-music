@@ -1,78 +1,85 @@
 <template>
-  <div class="playing-page">
-    <div class="playing-header">
-      <div class="header-icon">
-        <icon name="xiajiantou"></icon>
+  <transition name="slide">
+    <div class="playing-page" v-show="visible">
+      <div class="playing-header">
+        <div class="header-icon" @click="hidePlayDrawer">
+          <icon name="xiajiantou"></icon>
+        </div>
+        <div class="song-info" v-if="songs">
+          <div class="song-name">{{ songs.name }}</div>
+          <div class="singer-name">{{ songs.ar[0].name }}</div>
+        </div>
+        <div class="singer">
+          <div class="singer-avator"></div>
+          <div class="enjoy-icon">
+            <icon name="fenxiang"></icon>
+          </div>
+        </div>
       </div>
-      <div class="song-info" v-if="songs">
-        <div class="song-name">{{ songs.name }}</div>
-        <div class="singer-name">{{ songs.ar[0].name }}</div>
+      <div class="playing-body">
+        <component
+          ref="lyric"
+          :is="isShowWitch"
+          :song="songs"
+          :onCurrentTime="onCurrentTime"
+        ></component>
       </div>
-      <div class="singer">
-        <div class="singer-avator"></div>
-        <div class="enjoy-icon">
-          <icon name="fenxiang"></icon>
+      <div class="playing-footer">
+        <div class="play-song-audio">
+          <audio
+            :src="songUrl"
+            ref="player"
+            muted
+            @timeupdate="onChangeCurrentTime"
+            @canplay="getCanplay"
+            @ended="ended"
+          ></audio>
+          <div style="margin-right: 2.6rem">{{ cTime }}</div>
+          <div class="progress-bar" ref="totalbar" @click="playMusic($event)">
+            <span
+              class="progress__portion"
+              ref="runbar"
+              @touchstart="onTouchStart"
+              @touchmove="onTouchMove"
+              @touchend="onTouchEnd"
+            >
+              <span class="progress__pivot" ref="cycle"></span>
+            </span>
+          </div>
+          <div style="margin-left: 2.6rem">{{ dTime }}</div>
+        </div>
+        <div class="is-to-play">
+          <template v-for="c in controls">
+            <div
+              class="item"
+              :key="c.icon"
+              v-if="c.key !== isPlay"
+              @click="audioState(c.key)"
+            >
+              <icon :name="c.icon"></icon></div
+          ></template>
         </div>
       </div>
     </div>
-    <div class="playing-body">
-      <component
-        ref="lyric"
-        :is="isShowWitch"
-        :song="songs"
-        :onCurrentTime="onCurrentTime"
-      ></component>
-    </div>
-    <div class="playing-footer">
-      <div class="play-song-audio">
-        <audio
-          :src="songUrl"
-          ref="player"
-          muted
-          @timeupdate="onChangeCurrentTime"
-          @canplay="getCanplay"
-        ></audio>
-        <div style="margin-right: 2.6rem">{{ cTime }}</div>
-        <div class="progress-bar" ref="totalbar" @click="playMusic($event)">
-          <span
-            class="progress__portion"
-            ref="runbar"
-            @touchstart="onTouchStart"
-            @touchmove="onTouchMove"
-            @touchend="onTouchEnd"
-          >
-            <span class="progress__pivot" ref="cycle"></span>
-          </span>
-        </div>
-        <div style="margin-left: 2.6rem">{{ dTime }}</div>
-      </div>
-      <div class="is-to-play">
-        <template v-for="c in controls">
-          <div
-            class="item"
-            :key="c.icon"
-            v-if="c.key !== isPlay"
-            @click="audioState(c.key)"
-          >
-            <icon :name="c.icon"></icon></div
-        ></template>
-      </div>
-    </div>
-  </div>
+  </transition>
 </template>
 <script>
-import { getSongsDetail, playSongs } from '@/api/play'
 import PlayControl from './PlayControl.vue'
 import SongLibretto from './SongLibretto.vue'
 import ATest from '../ATest.vue'
 import MtSwitch from '@/components/MtSwitch.vue'
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
+  props: {
+    visible: {
+      type: Boolean,
+    },
+  },
   components: { PlayControl, SongLibretto, ATest, MtSwitch },
-  name: 'PlayingPage',
+  name: 'MtPlayDrawer',
   data() {
     return {
       checked: false,
-      songs: undefined,
       isShowWitch: 'SongLibretto',
       controls: [
         { name: '循环播放', icon: 'xe6a2', key: 'cycle' },
@@ -82,17 +89,19 @@ export default {
         { name: '下一曲', icon: 'xe7ff', key: 'nextSong' },
         { name: '列表', icon: 'xe60f', key: 'list' },
       ],
-      songUrl: undefined,
       cTime: '00:00', // 已播放时长
       dTime: '00:00', // 总播放时长
-      isPlay: 'pause', // 播放暂停按钮
       musicWidth: 0, // 进度条总宽度
+      showDrawer: true, // 是否显示音乐页面drawer
     }
   },
   async created() {
-    this.loadSongsDetail()
-    const data = await playSongs(186315)
-    this.songUrl = data.data[0].url
+    this.playCallbacks = []
+
+    this.changeSong(1450574147)
+  },
+  computed: {
+    ...mapState('playing', ['songUrl', 'songs', 'isPlay']),
   },
   mounted() {
     this.onResize()
@@ -101,7 +110,19 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize)
   },
+  watch: {
+    visible() {
+      this.$nextTick(() => {
+        this.onResize()
+      })
+    },
+  },
   methods: {
+    ...mapActions('playing', ['changeSong']),
+    ...mapMutations('playing', ['setPlayDrawer', 'setPlayState']),
+    hidePlayDrawer() {
+      this.setPlayDrawer(false)
+    },
     setAudioDTime(time) {
       const branch = Math.floor(time / 60)
       const second = Math.ceil(time % 60)
@@ -132,22 +153,14 @@ export default {
         return `${branch}:${second}`
       }
     },
-    async loadSongsDetail() {
-      try {
-        const data = await getSongsDetail(186315)
-        this.songs = data.songs[0]
-      } catch (e) {
-        console.error(e)
-      }
-    },
     // 控制播放和暂停
     audioState(key) {
       const music = this.$refs.player
       if (key === 'play') {
-        this.isPlay = 'play'
+        this.setPlayState('play')
         music.play()
       } else if (key === 'pause') {
-        this.isPlay = 'pause'
+        this.setPlayState('pause')
         music.pause()
       }
     },
@@ -167,6 +180,18 @@ export default {
       this.setAudioCtime(currentTime)
       musicBar.style.width = `${(currentTime / duration) * 100}%`
       this.$refs.lyric.setCurrentTime(currentTime * 1000)
+      this.playCallbacks.forEach((callback) => {
+        callback(currentTime, duration)
+      })
+    },
+    addPlayListener(callback) {
+      this.playCallbacks.push(callback)
+    },
+    removePlayListener(callback) {
+      const index = this.playCallbacks.findIndex((c) => {
+        return c === callback
+      })
+      index !== -1 && this.playCallbacks.splice(index, 1)
     },
     onTouchStart() {
       this.isTouching = true
@@ -205,6 +230,8 @@ export default {
       this.$refs.runbar.style.width = `${barWidth * 100}%`
       music.currentTime = music.duration * barWidth
     },
+    // 播放结束
+    ended() {},
     onCurrentTime(time) {
       const music = this.$refs.player
       music.currentTime = time / 1000
@@ -219,12 +246,33 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.slide-enter-active {
+  animation: slideInUp 0.5s both;
+}
+.slide-leave-active {
+  animation: slideInUp 0.5s both reverse;
+}
+
+@keyframes slideInUp {
+  0% {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+  100% {
+    transform: translateZ(0);
+  }
+}
 .playing-page {
   height: 100%;
   background: linear-gradient(#162333, #7d7d7b);
   color: #fff;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .playing-header {

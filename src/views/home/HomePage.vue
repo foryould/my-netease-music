@@ -61,27 +61,32 @@
       </div>
     </div>
     <div class="footer">
-      <div
-        class="footer-item"
-        v-for="f in footers"
-        :key="f.icon"
-        @click="onSelected(f.icon)"
-      >
+      <div class="footer-play" v-if="songs">
+        <mt-lyric :song="songs"></mt-lyric>
+      </div>
+      <div class="footer-tab">
         <div
-          class="footer-icon"
-          :class="isSelected === f.icon ? 'is-selected' : ''"
+          class="footer-item"
+          v-for="f in footers"
+          :key="f.icon"
+          @click="onSelected(f.icon)"
         >
-          <icon :name="f.icon"></icon>
-        </div>
-        <div
-          class="footer-name"
-          :class="isSelected === f.icon ? 'is-selected-name' : ''"
-        >
-          {{ f.name }}
+          <div
+            class="footer-icon"
+            :class="isSelected === f.icon ? 'is-selected' : ''"
+          >
+            <icon :name="f.icon"></icon>
+          </div>
+          <div
+            class="footer-name"
+            :class="isSelected === f.icon ? 'is-selected-name' : ''"
+          >
+            {{ f.name }}
+          </div>
         </div>
       </div>
-      <mt-drawer :visible.sync="isShowDrawer"></mt-drawer>
     </div>
+    <mt-drawer :visible.sync="isShowDrawer"></mt-drawer>
   </div>
 </template>
 <script>
@@ -93,8 +98,10 @@ import {
   getRecommendSongs,
   getBanners,
 } from '@/api/discovery'
+import { mapMutations, mapState } from 'vuex'
+import MtLyric from '@/components/MtLyric.vue'
 export default {
-  components: { MtDrawer, MtSwipe, MtButton },
+  components: { MtDrawer, MtSwipe, MtButton, MtLyric },
   name: 'HomePage',
   data() {
     return {
@@ -113,12 +120,16 @@ export default {
       recommendSongs: [],
     }
   },
+  computed: {
+    ...mapState('playing', ['songs', 'songUrl']),
+  },
   async created() {
     this.loadBanners()
     this.loadIcon()
     this.loadRecommendSongs()
   },
   methods: {
+    ...mapMutations('playing', ['setPlayDrawer']),
     async loadBanners() {
       try {
         const data = await getBanners()
@@ -200,9 +211,11 @@ export default {
 }
 
 .footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 3.2rem;
+  .footer-tab {
+    display: flex;
+    justify-content: space-between;
+    padding: 3.2rem;
+  }
 
   .footer-item {
     display: flex;
@@ -222,6 +235,11 @@ export default {
 
   .footer-name {
     color: #b0b0b0;
+  }
+
+  .footer-play {
+    height: 15.22rem;
+    padding: 1.2rem 3.2rem;
   }
 
   .is-selected {

@@ -16,8 +16,7 @@
   </div>
 </template>
 <script>
-import { getSongLyrics } from '@/api/play'
-import { formatTime } from '@/utils/index.js'
+import { mapState } from 'vuex'
 export default {
   name: 'SongLibretto',
   props: {
@@ -27,38 +26,31 @@ export default {
   },
   data() {
     return {
-      lyrics: [],
       currentIndex: '',
     }
   },
-  async created() {
-    await this.loadLyrics()
+  async created() {},
+  computed: {
+    ...mapState('playing', ['lyrics', 'isShowPlayDawer']),
   },
   mounted() {
-    this.onResize()
     window.addEventListener('resize', this.onResize)
   },
-  methods: {
-    async loadLyrics() {
-      try {
-        const data = await getSongLyrics(186315)
-        const lyrics = data.lrc.lyric
-        const lineLyric = lyrics.split(/\n/)
-        const regTime = /\[\d{2}:\d{2}.\d{2,3}\]/
-        lineLyric.forEach((item) => {
-          const obj = {}
-          const time = item.match(regTime)
-          obj.lyric = item.split(']')[1] === '' ? '' : item.split(']')[1]
-          obj.time = time ? formatTime(time[0].slice(1, time[0].length - 1)) : 0
-          this.lyrics.push(obj)
-          this.lyrics = this.lyrics.filter((item) => {
-            return item.lyric !== ''
-          })
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize)
+  },
+  watch: {
+    isShowPlayDawer(value) {
+      if (value) {
+        this.$nextTick(() => {
+          this.onResize()
         })
-      } catch (e) {
-        console.error(e)
       }
     },
+  },
+  inject: {},
+  provide: {},
+  methods: {
     setCurrentTime(time) {
       let start = 0
       let end = this.lyrics.length - 1
@@ -107,6 +99,7 @@ export default {
   .lyric-item {
     padding: 2.2rem 0;
     color: #a3a3b5;
+    text-align: center;
   }
   & .high-light {
     color: #fff;

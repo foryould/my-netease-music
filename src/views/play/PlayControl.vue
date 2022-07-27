@@ -16,9 +16,13 @@
   </div>
 </template>
 <script>
-import { getSongsDetail } from '@/api/play'
 export default {
   name: 'PlayControl',
+  props: {
+    song: {
+      type: Object,
+    },
+  },
   data() {
     return {
       playicon: [
@@ -29,23 +33,12 @@ export default {
         { name: '更多', icon: 'xe8c4' },
       ],
       currentAngle: 0,
-      song: undefined,
     }
   },
   async mounted() {
-    await this.loadSongsDetail()
     this.startPlay()
   },
   methods: {
-    async loadSongsDetail() {
-      try {
-        const data = await getSongsDetail(186315)
-        this.songs = data.songs[0]
-        console.log(data)
-      } catch (e) {
-        console.error(e)
-      }
-    },
     setCurrentAngle() {
       this.$refs.disc.style.transform = `rotate(${this.currentAngle}deg)`
       window.requestAnimationFrame(this.setCurrentAngle)

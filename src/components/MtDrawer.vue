@@ -58,8 +58,8 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
 import MtSwitch from './MtSwitch.vue'
+import { getUser } from '@/utils/auth'
 import { setTheme } from '@/utils/changeTheme'
 export default {
   name: 'MtDrawer',
@@ -105,7 +105,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo']),
+    userInfo() {
+      return getUser()
+    },
   },
   watch: {
     visible(value) {

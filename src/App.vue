@@ -1,9 +1,32 @@
 <template>
   <div id="app">
     <router-view />
+    <mt-play-drawer :visible="isShowPlayDawer" ref="play"></mt-play-drawer>
   </div>
 </template>
 
+<script>
+import MtPlayDrawer from '@/views/play/PlayingPage.vue'
+
+export default {
+  components: { MtPlayDrawer },
+  provide() {
+    return {
+      getPlayState: () => this.$refs.play,
+    }
+  },
+  computed: {
+    isShowPlayDawer: {
+      get() {
+        return this.$store.state.playing.isShowPlayDawer
+      },
+      set(v) {
+        this.$store.commit('playing/setPlayDrawer', v)
+      },
+    },
+  },
+}
+</script>
 <style lang="scss">
 * {
   margin: 0;
