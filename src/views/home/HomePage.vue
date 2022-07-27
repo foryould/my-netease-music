@@ -185,6 +185,7 @@ export default {
       input {
         border: none;
         background-color: transparent;
+        outline: none;
 
         &::placeholder {
           color: #ccc;
