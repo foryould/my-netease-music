@@ -150,6 +150,7 @@ export default {
   }
   input {
     border: none;
+    outline: none;
   }
   .operate {
     padding-top: 8rem;
@@ -228,5 +229,9 @@ export default {
 }
 .agree-animate {
   animation: shake 0.4s;
+}
+
+.form {
+  padding: 0 2.67rem;
 }
 </style>
