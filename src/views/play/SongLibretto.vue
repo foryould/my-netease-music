@@ -6,7 +6,7 @@
           :ref="`lyr-${index}`"
           class="lyric-item"
           :key="index"
-          @click="onchangeLyrics(l.time)"
+          @click.stop="onchangeLyrics(l.time)"
           :class="currentIndex === index ? 'high-light' : ''"
         >
           {{ l.lyric }}
@@ -17,6 +17,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { addResizeListener, removeResizeListener } from '@/utils/dom'
 export default {
   name: 'SongLibretto',
   props: {
@@ -34,10 +35,10 @@ export default {
     ...mapState('playing', ['lyrics', 'isShowPlayDawer']),
   },
   mounted() {
-    window.addEventListener('resize', this.onResize)
+    addResizeListener(this.$el, this.onResize)
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
+    removeResizeListener(this.$el, this.onResize)
   },
   watch: {
     isShowPlayDawer(value) {
@@ -48,8 +49,6 @@ export default {
       }
     },
   },
-  inject: {},
-  provide: {},
   methods: {
     setCurrentTime(time) {
       let start = 0

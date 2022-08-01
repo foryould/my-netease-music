@@ -16,13 +16,17 @@
           </div>
         </div>
       </div>
-      <div class="playing-body">
-        <component
+      <div class="playing-body" @click="onBodyClick">
+        <play-control
+          :song="songs"
+          v-show="isShowWitch === 'PlayControl'"
+        ></play-control>
+        <song-libretto
+          v-show="isShowWitch === 'SongLibretto'"
           ref="lyric"
-          :is="isShowWitch"
           :song="songs"
           :onCurrentTime="onCurrentTime"
-        ></component>
+        ></song-libretto>
       </div>
       <div class="playing-footer">
         <div class="play-song-audio">
@@ -66,8 +70,6 @@
 <script>
 import PlayControl from './PlayControl.vue'
 import SongLibretto from './SongLibretto.vue'
-import ATest from '../ATest.vue'
-import MtSwitch from '@/components/MtSwitch.vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   props: {
@@ -75,12 +77,12 @@ export default {
       type: Boolean,
     },
   },
-  components: { PlayControl, SongLibretto, ATest, MtSwitch },
+  components: { PlayControl, SongLibretto },
   name: 'MtPlayDrawer',
   data() {
     return {
       checked: false,
-      isShowWitch: 'SongLibretto',
+      isShowWitch: 'PlayControl',
       controls: [
         { name: '循环播放', icon: 'xe6a2', key: 'cycle' },
         { name: '上一曲', icon: 'xe800', key: 'prev' },
@@ -98,7 +100,7 @@ export default {
   async created() {
     this.playCallbacks = []
 
-    this.changeSong(1450574147)
+    this.changeSong(1474411443)
   },
   computed: {
     ...mapState('playing', ['songUrl', 'songs', 'isPlay']),
@@ -242,6 +244,13 @@ export default {
     switchComponents() {
       this.isShowWitch = 'PlayControl'
     },
+    onBodyClick() {
+      if (this.isShowWitch === 'SongLibretto') {
+        this.isShowWitch = 'PlayControl'
+      } else if (this.isShowWitch === 'PlayControl') {
+        this.isShowWitch = 'SongLibretto'
+      }
+    },
   },
 }
 </script>
@@ -320,6 +329,7 @@ export default {
   flex: 1;
   padding: 0 10rem;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .playing-footer {

@@ -4,9 +4,9 @@
       <div class="icon-list" @click="showDrawer">
         <icon name="list-v2-full"></icon>
       </div>
-      <div class="header-search">
+      <div class="header-search" @click="goToSearchPage">
         <icon class="icon-search" name="sousuo"></icon>
-        <input v-model="search" placeholder="请输入歌曲" />
+        <!-- <input v-model="search" placeholder="请输入歌曲" /> -->
       </div>
       <div class="icon-record">
         <icon name="record-sound-full"></icon>
@@ -130,6 +130,9 @@ export default {
   },
   methods: {
     ...mapMutations('playing', ['setPlayDrawer']),
+    goToSearchPage() {
+      this.$router.push('/searching')
+    },
     async loadBanners() {
       try {
         const data = await getBanners()
@@ -236,11 +239,6 @@ export default {
 
   .footer-name {
     color: #b0b0b0;
-  }
-
-  .footer-play {
-    height: 15.22rem;
-    padding: 1.2rem 3.2rem;
   }
 
   .is-selected {

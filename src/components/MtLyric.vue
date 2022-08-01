@@ -1,15 +1,15 @@
 <template>
-  <div class="mt-lyric">
+  <div class="mt-lyric" v-if="songs">
     <div class="lyric-name" @click="showPlayDrawer">
-      <div class="play-disc" ref="disc">
-        <div class="play-disc-two">
-          <img :src="song.al.picUrl" />
-        </div>
-      </div>
+      <mt-disc :imgUrl="songs.al.picUrl" isSmall></mt-disc>
       <div class="name">
-        <span style="font-size: 16px; color: #000">{{ song.name }}</span>
+        <span style="font-size: 4.27rem; color: var(--primary-text-color)">{{
+          songs.name
+        }}</span>
         <span>-</span>
-        <span style="color: #666">{{ song.ar[0].name }}</span>
+        <span style="color: var(--secondary-text-color)">{{
+          songs.ar[0].name
+        }}</span>
       </div>
     </div>
     <div class="lyric-icon">
@@ -29,18 +29,10 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import MtCircleProgress from './MtCircleProgress.vue'
+import MtDisc from './MtDisc.vue'
 export default {
   name: 'MtLyric',
-  components: { MtCircleProgress },
-  props: {
-    song: {
-      type: Object,
-      required: true,
-    },
-    visible: {
-      type: Boolean,
-    },
-  },
+  components: { MtCircleProgress, MtDisc },
   inject: ['getPlayState'],
   data() {
     return {
@@ -48,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('playing', ['isPlay', 'lyrics']),
+    ...mapState('playing', ['isPlay', 'lyrics', 'songs']),
   },
   mounted() {
     this.getPlayState().addPlayListener(this.onPlayProgressChange)
@@ -79,7 +71,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .mt-lyric {
-  height: 100%;
+  height: 15.22rem;
+  padding: 1.2rem 3.2rem;
+  background-color: var(--bg-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -123,9 +117,9 @@ export default {
   .play-icon {
     font-size: 5rem;
     margin-right: 5.33rem;
-    height: 13.33rem;
+    height: 11.33rem;
     position: relative;
-    width: 13.33rem;
+    width: 11.33rem;
   }
 
   .pause-icon {
