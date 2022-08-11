@@ -40,10 +40,12 @@ export const playing = {
         console.error(e)
       }
     },
-    changeSong(context, id) {
-      context.dispatch('loadSongsDetail', id)
-      context.dispatch('loadSongsUrl', id)
-      context.dispatch('loadLyrics', id)
+    async changeSong(context, id) {
+      await Promise.all([
+        context.dispatch('loadSongsDetail', id),
+        context.dispatch('loadSongsUrl', id),
+        context.dispatch('loadLyrics', id),
+      ])
       context.commit('setSongId', id)
     },
     async loadSongsUrl(context, id) {

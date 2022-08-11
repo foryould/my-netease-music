@@ -7,7 +7,7 @@
         type ? `button-${type}` : '',
         round ? `button-round` : '',
         size ? `button-${size}` : '',
-        pliain ? `button-${plain}` : '',
+        plain ? 'button-plain' : '',
       ]"
       :disabled="disabeld"
     >
@@ -29,7 +29,7 @@ export default {
     type: {
       type: String,
     },
-    pliain: {
+    plain: {
       type: Boolean,
       default: () => false,
     },
@@ -68,8 +68,17 @@ export default {
   background-color: #07c160;
   border: 1px solid #07c160;
 }
+.button-danger {
+  color: #fff;
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
 
 .button-round {
   border-radius: 999px;
+}
+
+.button-plain {
+  background-color: var(--bg-color);
 }
 </style>

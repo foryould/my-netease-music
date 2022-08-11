@@ -5,8 +5,10 @@
         <icon name="list-v2-full"></icon>
       </div>
       <div class="header-search" @click="goToSearchPage">
-        <icon class="icon-search" name="sousuo"></icon>
-        <!-- <input v-model="search" placeholder="请输入歌曲" /> -->
+        <icon class="icon-search" name="sousuo" v-show="defaultData"></icon>
+        <div class="pla">
+          <span>{{ defaultData && defaultData.showKeyword }}</span>
+        </div>
       </div>
       <div class="icon-record">
         <icon name="record-sound-full"></icon>
@@ -100,6 +102,7 @@ import {
 } from '@/api/discovery'
 import { mapMutations, mapState } from 'vuex'
 import MtLyric from '@/components/MtLyric.vue'
+import { getSearchDefault } from '@/api/search'
 export default {
   components: { MtDrawer, MtSwipe, MtButton, MtLyric },
   name: 'HomePage',
@@ -118,20 +121,45 @@ export default {
       list: [],
       discs: [],
       recommendSongs: [],
+      defaultData: undefined,
     }
   },
   computed: {
     ...mapState('playing', ['songs', 'songUrl']),
   },
   async created() {
+    this.loadSearchDefault()
     this.loadBanners()
     this.loadIcon()
     this.loadRecommendSongs()
   },
+  mounted() {
+    this.timer = setInterval(() => {
+      this.loadSearchDefault()
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+  },
   methods: {
     ...mapMutations('playing', ['setPlayDrawer']),
     goToSearchPage() {
-      this.$router.push('/searching')
+      if (this.defaultData) {
+        this.$router.push({
+          name: 'SearchPage',
+          params: {
+            defaultKeywords: this.defaultData.realkeyword,
+          },
+        })
+      }
+    },
+    async loadSearchDefault() {
+      try {
+        const data = await getSearchDefault()
+        this.defaultData = data.data
+      } catch (e) {
+        console.error(e)
+      }
     },
     async loadBanners() {
       try {
@@ -180,11 +208,12 @@ export default {
     padding: 1.2em;
     .header-search {
       flex: 1;
-      padding: 8px 0px;
+      height: 36px;
       border-radius: 12rem;
       background-color: var(--secondary-bg-color);
       display: flex;
       align-items: center;
+      justify-content: center;
       input {
         border: none;
         background-color: transparent;
@@ -342,5 +371,10 @@ export default {
 
 .discovery-banner {
   height: 35.2vw;
+}
+
+.pla {
+  color: #aaa;
+  font-size: 14px;
 }
 </style>

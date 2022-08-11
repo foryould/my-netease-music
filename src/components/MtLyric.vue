@@ -51,6 +51,10 @@ export default {
   methods: {
     ...mapMutations('playing', ['setPlayDrawer', 'setPlayState']),
     onPlayProgressChange(currentTime, duration) {
+      if (!duration) {
+        this.playProgress = 0
+        return
+      }
       this.playProgress = currentTime / duration
     },
     playMusic() {

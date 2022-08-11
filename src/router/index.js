@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomePage from '../views/home/HomePage.vue'
 import LoginPage from '@/views/LoginPage'
 import PlayingPage from '@/views/play/PlayingPage.vue'
+import SearchPage from '@/views/search/SearchPage.vue'
 import ATest from '@/views/ATest.vue'
 import { getToken } from '@/utils/auth'
 
@@ -23,6 +24,11 @@ const routes = [
     path: '/playing',
     name: 'PlayingPage',
     component: PlayingPage,
+  },
+  {
+    path: '/searching',
+    name: 'SearchPage',
+    component: SearchPage,
   },
   {
     path: '/test',

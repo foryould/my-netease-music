@@ -233,7 +233,13 @@ export default {
       music.currentTime = music.duration * barWidth
     },
     // 播放结束
-    ended() {},
+    ended() {
+      const musicBar = this.$refs.runbar
+      musicBar.style.width = 0
+      this.currentTime = 0
+      this.cTime = '00:00'
+      this.setPlayState('pause')
+    },
     onCurrentTime(time) {
       const music = this.$refs.player
       music.currentTime = time / 1000

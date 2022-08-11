@@ -118,7 +118,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login-logo {
-  font-size: 200px;
+  font-size: 53.33rem;
   display: flex;
   justify-content: center;
 }
