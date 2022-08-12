@@ -2,13 +2,23 @@
   <div class="search-details" @scroll="onScroll">
     <mt-tabs v-model="active" :tabs="tabs" @change="onClickTab">
       <template #song>
-        <song-list v-if="songList" :songList="songList"></song-list>
+        <song-list v-if="songList" :songList="songList">
+          <template #icon>
+            <div class="icon">
+              <icon name="xe710"></icon>
+            </div>
+          </template>
+        </song-list>
       </template>
       <template #playlist>
         <play-list v-if="playList" :play-list="playList"></play-list>
       </template>
       <template #singer>
-        <singer-list v-if="singerList" :singer-list="singerList"></singer-list>
+        <singer-list
+          v-if="singerList"
+          :singer-list="singerList"
+          :active="active"
+        ></singer-list>
       </template>
       <template #album>
         <album-list
@@ -37,6 +47,7 @@ export default {
   data() {
     return {
       active: 'song',
+      lastActive: 'song',
       tabs: [
         { title: '单曲', name: 'song', type: 1 },
         { title: '歌单', name: 'playlist', type: 1000 },
@@ -103,12 +114,14 @@ export default {
       }
     },
     onClickTab(t) {
+      this.active = t.name
+      if (this.lastActive === t.name) return
+      this.lastActive = t.name
       this.page = 1
       this.songList = []
       this.playList = []
       this.singerList = []
       this.albumList = []
-      this.active = t.name
       this.loadSongListData()
     },
     onScroll(e) {

@@ -1,6 +1,11 @@
 <template>
   <div class="album-list">
-    <div class="album-item" v-for="(a, index) in albumList" :key="index">
+    <div
+      class="album-item"
+      v-for="(a, index) in albumList"
+      :key="index"
+      @click="gotoAlbumDetail(a)"
+    >
       <div class="blur-pic">
         <img :src="a.blurPicUrl" />
       </div>
@@ -33,6 +38,20 @@ export default {
       required: true,
     },
     search: String,
+  },
+  methods: {
+    gotoAlbumDetail(a) {
+      this.$router.push({
+        name: 'AlbumListDetail',
+        params: {
+          list: a,
+        },
+        query: {
+          id: a.id,
+          title: '专辑',
+        },
+      })
+    },
   },
 }
 </script>

@@ -1,7 +1,9 @@
 import Icon from './Icon.vue'
+import MtLyric from './MtLyric.vue'
 
 const components = {
   Icon,
+  MtLyric,
 }
 
 export default {

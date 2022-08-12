@@ -6,6 +6,7 @@
       :key="index"
       @click="onPlaySong(s.id)"
     >
+      <slot name="index" :index="index"></slot>
       <div class="song-name">
         <div class="name">{{ s.name }}</div>
         <div class="song-info">
@@ -34,9 +35,7 @@
         </div>
       </div>
       <div class="song-icon">
-        <div class="icon">
-          <icon name="xe710"></icon>
-        </div>
+        <slot name="icon"></slot>
         <div class="icon">
           <icon name="xe8c4"></icon>
         </div>
@@ -68,7 +67,7 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .list-item {
   display: flex;
   justify-content: space-between;
@@ -102,6 +101,7 @@ export default {
 
 .song-name {
   overflow: hidden;
+  flex: 1;
 
   .name {
     font-size: 4.27rem;

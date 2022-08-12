@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view />
+    <keep-alive :include="['SearchPage']">
+      <router-view />
+    </keep-alive>
     <mt-play-drawer :visible="isShowPlayDawer" ref="play"></mt-play-drawer>
   </div>
 </template>

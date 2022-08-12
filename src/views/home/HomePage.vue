@@ -136,7 +136,7 @@ export default {
   mounted() {
     this.timer = setInterval(() => {
       this.loadSearchDefault()
-    }, 1000)
+    }, 1000 * 60)
   },
   beforeDestroy() {
     clearTimeout(this.timer)

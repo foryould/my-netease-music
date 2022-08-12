@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export function formatTime(time) {
   const regMin = /.*:/
   const regSec = /:.*\./
@@ -17,6 +19,19 @@ export function numberFormat(value) {
     return `${value}万次`
   }
 }
+
+export function countFormat(value) {
+  if (value === 0) return value
+  if (!value) return
+  const s = value.toString()
+  if (s.length <= 5) {
+    return Number(s)
+  } else {
+    value = parseInt(value / 10000)
+    return `${value}万`
+  }
+}
+
 export function debounce(func, delay = 500) {
   let timer
   return function () {
@@ -26,4 +41,10 @@ export function debounce(func, delay = 500) {
       func.apply(this, args)
     }, delay)
   }
+}
+
+export function dateFormat(date, format) {
+  if (!date) return
+  date = dayjs(date)
+  return date.format(format || 'YYYY-MM-DD')
 }

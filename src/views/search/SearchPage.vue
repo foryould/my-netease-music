@@ -127,12 +127,27 @@ export default {
     defaultKeywords() {
       return this.$route.params.defaultKeywords
     },
+    isShowPage() {
+      return this.$route.params.isShowPage
+    },
+    isSearch() {
+      return this.$route.params.search
+    },
+    active() {
+      return this.$route.params.active
+    },
   },
   created() {
     this.onInput = debounce(this.onInput)
     // this.search = this.defaultKeywords
     this.getSearchHot()
     this.getSearchDetail()
+    if (this.isShowPage) {
+      this.isShowWitch = this.isShowPage
+    }
+    if (this.isSearch) {
+      this.search = this.isSearch
+    }
   },
   methods: {
     async getSearchHot() {
@@ -150,12 +165,15 @@ export default {
     onBack() {
       this.search = ''
       if (this.isShowWitch === 'searchRecommend') {
-        this.$router.go(-1)
+        this.$router.push('/')
       } else {
         this.isShowWitch = 'searchRecommend'
       }
     },
     async seek() {
+      if (!this.search) {
+        this.search = this.defaultKeywords
+      }
       if (!this.search) return
       if (this.historys.indexOf(this.search) === -1) {
         this.historys.unshift(this.search)

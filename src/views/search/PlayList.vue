@@ -1,6 +1,11 @@
 <template>
   <div class="play-list">
-    <div class="play-item" v-for="(p, index) in playList" :key="index">
+    <div
+      class="play-item"
+      v-for="(p, index) in playList"
+      :key="index"
+      @click="gotoListDetail(p)"
+    >
       <div class="cover-img">
         <img :src="p.coverImgUrl" />
       </div>
@@ -23,6 +28,20 @@ export default {
     playList: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    gotoListDetail(p) {
+      this.$router.push({
+        name: 'SongListDetail',
+        params: {
+          list: p,
+        },
+        query: {
+          id: p.id,
+          title: '歌单',
+        },
+      })
     },
   },
 }

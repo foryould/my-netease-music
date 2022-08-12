@@ -1,6 +1,6 @@
-import { numberFormat } from '@/utils/index'
+import { numberFormat, countFormat, dateFormat } from '@/utils/index'
 
-const filter = { numberFormat }
+const filter = { numberFormat, countFormat, dateFormat }
 
 export default {
   install(Vue) {

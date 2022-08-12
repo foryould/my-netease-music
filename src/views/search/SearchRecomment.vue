@@ -103,7 +103,7 @@ export default {
         await dialog.confirm('确认清空历史记录吗？')
         this.$emit('clear-search-history')
       } catch {
-        // console.log('取消了')
+        console.log('取消了')
       }
     },
     refresh() {
