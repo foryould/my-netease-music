@@ -4,10 +4,13 @@
       <div v-if="showDrawer" class="drawer-content" @click.stop>
         <div class="user-info">
           <div class="users">
-            <span class="avatar-url">
+            <span class="avatar-url" v-if="userInfo">
               <img :src="userInfo.avatarUrl" />
             </span>
-            <span class="nickname">{{ userInfo.nickname }}</span>
+            <span class="nickname" v-if="userInfo">{{
+              userInfo.nickname
+            }}</span>
+            <span @click="toLoginPage" v-if="!userInfo">立即登录</span>
             <div class="jkh">
               <icon name="changyongicon-"></icon>
             </div>
@@ -49,7 +52,7 @@
               </div>
             </div>
           </div>
-          <div class="logout card">
+          <div class="logout card" @click="logout">
             <button>退出登录</button>
           </div>
         </div>
@@ -59,8 +62,10 @@
 </template>
 <script>
 import MtSwitch from './MtSwitch.vue'
-import { getUser } from '@/utils/auth'
 import { setTheme } from '@/utils/changeTheme'
+import dialog from '@/utils/dialog'
+import { logout } from '@/api/login'
+import { mapState } from 'vuex'
 export default {
   name: 'MtDrawer',
   components: { MtSwitch },
@@ -105,9 +110,7 @@ export default {
     }
   },
   computed: {
-    userInfo() {
-      return getUser()
-    },
+    ...mapState(['userInfo']),
   },
   watch: {
     visible(value) {
@@ -128,6 +131,21 @@ export default {
     onchange(e) {
       this.isSwitch = e
       e ? setTheme('dark') : setTheme('light')
+    },
+    // 退出登录
+    async logout() {
+      try {
+        await dialog.confirm('确定退出登录吗？')
+        await logout()
+        localStorage.removeItem('user')
+        location.reload()
+      } catch (e) {
+        return
+      }
+    },
+    // 跳转至登录页面
+    toLoginPage() {
+      this.$router.push('/login')
     },
   },
 }

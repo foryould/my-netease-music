@@ -41,7 +41,7 @@
 <script>
 import { getCode, loginByCode } from '@/api/login'
 import toast from '@/utils/toast'
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { setToken, setUser } from '@/utils/auth.js'
 export default {
   name: 'LoginPage',
@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setUserInfo']),
+    ...mapActions(['init']),
     async getCode() {
       try {
         const data = await getCode(this.phone)
@@ -105,6 +106,7 @@ export default {
           phone: this.phone,
           captcha: this.phoneCode,
         })
+        this.init()
         this.setUserInfo(loginResult.profile)
         setToken(loginResult.token)
         setUser(loginResult.profile)
@@ -181,6 +183,7 @@ export default {
     }
     .agree-terms-text {
       font-size: 3.2rem;
+      margin-left: 2rem;
     }
     .is-active {
       background-color: #bbb;

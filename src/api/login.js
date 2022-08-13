@@ -10,3 +10,13 @@ export function loginByCode({ phone, captcha }) {
     params: { phone, captcha },
   })
 }
+
+// 获取登录状态
+export function getLoginState() {
+  return axios.get('/login/status')
+}
+
+// 退出登录
+export function logout() {
+  return axios.get('/logout')
+}

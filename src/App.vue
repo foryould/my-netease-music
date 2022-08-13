@@ -9,6 +9,7 @@
 
 <script>
 import MtPlayDrawer from '@/views/play/PlayingPage.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components: { MtPlayDrawer },
@@ -26,6 +27,12 @@ export default {
         this.$store.commit('playing/setPlayDrawer', v)
       },
     },
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    ...mapActions(['init']),
   },
 }
 </script>

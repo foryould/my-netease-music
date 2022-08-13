@@ -42,7 +42,7 @@
           <div class="discovery-name">{{ d.name }}</div>
         </div>
       </div>
-      <div class="recommend">
+      <div class="recommend" v-if="userInfo">
         <div class="recommend-title">
           <h4>推荐歌单</h4>
           <mt-button round>
@@ -61,6 +61,18 @@
           </div>
         </div>
       </div>
+      <mt-button
+        style="margin-top: 100px; padding: 10px 20px"
+        round
+        type="danger"
+        v-else
+        @click="toLoginPage"
+      >
+        <span style="display: flex; align-items: center">
+          <span>立即登陆开启个性推荐</span>
+          <icon name="xe612" style="line-height: initial"></icon>
+        </span>
+      </mt-button>
     </div>
     <div class="footer">
       <div class="footer-play" v-if="songs">
@@ -126,6 +138,7 @@ export default {
   },
   computed: {
     ...mapState('playing', ['songs', 'songUrl']),
+    ...mapState(['userInfo']),
   },
   async created() {
     this.loadSearchDefault()
@@ -190,6 +203,9 @@ export default {
     },
     onSelected(icon) {
       this.isSelected = icon
+    },
+    toLoginPage() {
+      this.$router.push('/login')
     },
   },
 }

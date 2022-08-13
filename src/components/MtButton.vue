@@ -49,13 +49,12 @@ export default {
 .button {
   position: relative;
   display: inline-block;
-  height: 6.4rem;
   font-size: 3.2rem;
   line-height: 1.2;
   text-align: center;
   cursor: pointer;
   transition: opacity 0.2s;
-  padding: 0 2.67rem;
+  padding: 1.6rem 2.67rem;
 }
 
 .button-normal {

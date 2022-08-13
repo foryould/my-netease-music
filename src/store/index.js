@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getUser } from '@/utils/auth'
 import { playing } from './play.js'
+import { getLoginState } from '@/api/login'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: getUser(),
+    userInfo: undefined,
   },
   getters: {},
   mutations: {
@@ -15,6 +15,15 @@ export default new Vuex.Store({
       state.userInfo = userInfo
     },
   },
-  actions: {},
+  actions: {
+    async init(ctx) {
+      try {
+        const data = await getLoginState()
+        ctx.commit('setUserInfo', data.data.profile)
+      } catch (e) {
+        console.error(e)
+      }
+    },
+  },
   modules: { playing },
 })
