@@ -1,6 +1,11 @@
 <template>
   <div class="singer-list">
-    <div class="singer-item" v-for="(s, index) in singerList" :key="index">
+    <div
+      class="singer-item"
+      v-for="(s, index) in singerList"
+      :key="index"
+      @click="toSingerDetail(s)"
+    >
       <div class="singer-info">
         <div class="imgurl">
           <img :src="s.img1v1Url" />
@@ -28,6 +33,16 @@ export default {
       required: true,
     },
   },
+  methods: {
+    toSingerDetail(s) {
+      this.$router.push({
+        path: '/singer',
+        query: {
+          id: s.id,
+        },
+      })
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -47,9 +62,11 @@ export default {
 
   .imgurl {
     height: 100%;
+    width: 50px;
     margin-right: 2.67rem;
   }
   img {
+    width: 100%;
     height: 100%;
     border-radius: 50%;
   }

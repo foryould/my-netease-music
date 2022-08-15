@@ -5,6 +5,7 @@ import LoginPage from '@/views/LoginPage'
 import SearchPage from '@/views/search/SearchPage.vue'
 import SongListDetail from '@/views/song/SongListDetail.vue'
 import AlbumListDetail from '@/views/album/AlbumListDetail.vue'
+import SingerDetail from '@/views/singer/SingerDetail.vue'
 import ATest from '@/views/ATest.vue'
 import { getToken } from '@/utils/auth'
 
@@ -39,6 +40,12 @@ const routes = [
     path: '/albuming',
     name: 'AlbumListDetail',
     component: AlbumListDetail,
+    meta: { noAuth: true },
+  },
+  {
+    path: '/singer',
+    name: 'SingerDetail',
+    component: SingerDetail,
     meta: { noAuth: true },
   },
   {

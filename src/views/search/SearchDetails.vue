@@ -1,5 +1,5 @@
 <template>
-  <div class="search-details" @scroll="onScroll">
+  <div class="search-details" @scroll="onScroll" v-loading="loading">
     <mt-tabs v-model="active" :tabs="tabs" @change="onClickTab">
       <template #song>
         <song-list v-if="songList" :songList="songList">
@@ -46,6 +46,7 @@ export default {
   components: { MtTabs, SongList, PlayList, SingerList, AlbumList },
   data() {
     return {
+      loading: false,
       active: 'song',
       lastActive: 'song',
       tabs: [
@@ -58,7 +59,7 @@ export default {
       playList: [],
       singerList: [],
       albumList: [],
-      loading: false,
+      isOk: false,
       limit: 30,
       page: 1, // 页数
       flag: false,
@@ -71,6 +72,7 @@ export default {
     async loadSongListData() {
       const type = this.tabs.find((t) => t.name === this.active).type
       const offset = (this.page - 1) * this.limit
+      this.isOk = true
       this.loading = true
       try {
         const data = await getsearchContent(
@@ -112,6 +114,7 @@ export default {
       } catch (e) {
         console.error(e)
       } finally {
+        this.isOk = false
         this.loading = false
       }
     },
@@ -132,7 +135,7 @@ export default {
       let scrollHeight = e.target.scrollHeight
       if (clientHeight + scrollTop >= scrollHeight - 100) {
         this.$refs.refreshText.innerHTML = '加载中...'
-        if (!this.loading && !this.flag) {
+        if (!this.isOk && !this.flag) {
           this.page++
           this.loadSongListData()
         }

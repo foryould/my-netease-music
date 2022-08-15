@@ -61,7 +61,7 @@ export default {
         const data = await getPlayListDetail(this.id)
         this.playlist = data.playlist
       } catch (e) {
-        console.log(e)
+        console.error(e)
       }
     },
   },

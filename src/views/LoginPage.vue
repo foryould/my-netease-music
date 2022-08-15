@@ -79,7 +79,7 @@ export default {
     ...mapActions(['init']),
     async getCode() {
       try {
-        const data = await getCode(this.phone)
+        await getCode(this.phone)
         this.codeCountDown = 60
         this.timer = setInterval(() => {
           this.codeCountDown--
@@ -87,7 +87,6 @@ export default {
             clearInterval(this.timer)
           }
         }, 1000)
-        console.log(data)
       } catch (e) {
         console.error(e)
       }
