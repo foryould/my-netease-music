@@ -140,6 +140,10 @@ export default {
   watch: {
     search(v) {
       if (v) {
+        this.songList = []
+        this.playList = []
+        this.singerList = []
+        this.albumList = []
         this.loadSongListData()
       }
     },

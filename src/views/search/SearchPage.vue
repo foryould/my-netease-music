@@ -167,6 +167,7 @@ export default {
       if (this.isShowWitch === 'searchRecommend') {
         this.$router.push('/')
       } else {
+        this.$refs.sug.style.display = 'none'
         this.isShowWitch = 'searchRecommend'
       }
     },
@@ -198,7 +199,6 @@ export default {
       }
     },
     async onInput(e) {
-      console.log(e.target.value)
       try {
         if (e.target.value) {
           const data = await getSearchSuggest(e.target.value, 'mobile')

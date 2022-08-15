@@ -31,7 +31,7 @@ export function countFormat(value) {
     return `${value}万`
   }
 }
-
+// 防抖
 export function debounce(func, delay = 500) {
   let timer
   return function () {
