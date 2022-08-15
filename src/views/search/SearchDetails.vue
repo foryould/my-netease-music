@@ -106,7 +106,9 @@ export default {
         this.singerList.push(...(s || []))
         this.albumList.push(...(data.result.albums || []))
         this.songList.push(...(data.result.songs || []))
-        this.$refs.refreshText.innerHTML = ''
+        if (this.$refs.refreshText) {
+          this.$refs.refreshText.innerHTML = ''
+        }
       } catch (e) {
         console.error(e)
       } finally {

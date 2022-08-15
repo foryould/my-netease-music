@@ -212,6 +212,7 @@ export default {
           this.$refs.sug.style.display = 'block'
         } else if (!e.target.value) {
           this.$refs.sug.style.display = 'none'
+          this.isShowWitch = 'searchRecommend'
         }
       } catch (e) {
         console.error(e)
